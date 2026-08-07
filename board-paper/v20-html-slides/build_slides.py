@@ -3,6 +3,9 @@
 Self-contained: embedded Spectral display face, inline SVG charts, no external assets."""
 import json
 
+LG=json.load(open("logos_b64.json"))
+LOGO_NAVY_SRC=f"data:image/png;base64,{LG['navy']}"
+LOGO_WHITE_SRC=f"data:image/png;base64,{LG['white']}"
 F=json.load(open("fonts_b64.json"))
 def face(name,style,weight,key):
     return (f"@font-face{{font-family:'{name}';font-style:{style};font-weight:{weight};"
@@ -17,35 +20,61 @@ FONTS="\n".join([
 NAVY="#002B5C"; DEEP="#002147"; GRAPH="#35464F"; SLATE="#869397"
 TEAL="#008080"; STEEL="#4682B4"; GOLD="#C8A951"; MIST="#E8E8E8"
 
-# ================= AUM build chart (SVG) =================
+# ================= AUM build chart (stepped line + 3 track-record paths) =================
 def aum_chart():
-    W,H=1120,338; L,R,T,B=70,158,16,40
+    W,H=1180,432; L,R,T,B=66,252,44,52
     ymax=3000
-    def X(i,n): return L+(W-L-R)*(i+0.5)/n
+    x0=L; x1=W-R; xMid=x0+(x1-x0)*0.60           # Year-5 divergence point
     def Y(v): return T+(H-T-B)*(1-v/ymax)
-    stages=[("Y1",600),("Y2",1000),("Y3",1400),("Y4",1700),("Y5",2000)]
-    n=len(stages); bw=(W-L-R)/n*0.52
-    s=[f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Illustrative AUM build">']
-    # gridlines
-    for gv in (0,1000,2000,3000):
+    def XY(i): return x0+(xMid-x0)*i/5            # year index 0..5 -> x
+    lv=[0,600,1000,1400,1700,2000]               # Start..Y5 levels
+    labs=["US$600m","US$1.0bn","US$1.4bn","US$1.7bn","c.US$2.0bn"]
+    gap=(xMid-x0)/5; plat=gap*0.46
+    s=[f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Illustrative AUM build and track-record outcomes">']
+    # y gridlines + ticks
+    for gv in (0,600,1000,1400,2000,2400,3000):
         y=Y(gv)
-        s.append(f'<line x1="{L}" y1="{y:.1f}" x2="{W-R}" y2="{y:.1f}" stroke="#e7e9ec" stroke-width="1"/>')
-        s.append(f'<text x="{L-10}" y="{y+4:.1f}" text-anchor="end" font-size="12" fill="{SLATE}">{gv:,}</text>')
-    # outcome reference lines (sustainable level by track record)
-    outc=[(1500,"40%","US$1.5bn",SLATE),(2000,"30%","US$2.0bn",GOLD),(3000,"20%","US$3.0bn",SLATE)]
-    for v,pct,lab,col in outc:
-        y=Y(v)
-        dash='' if col==GOLD else 'stroke-dasharray="4 4"'
-        s.append(f'<line x1="{L}" y1="{y:.1f}" x2="{W-R}" y2="{y:.1f}" stroke="{col}" stroke-width="{2 if col==GOLD else 1.2}" {dash} opacity="{1 if col==GOLD else .6}"/>')
-        s.append(f'<text x="{W-R+8}" y="{y-3:.1f}" font-size="12.5" font-weight="700" fill="{col if col==GOLD else GRAPH}">{pct} co-inv</text>')
-        s.append(f'<text x="{W-R+8}" y="{y+13:.1f}" font-size="11.5" fill="{SLATE}">{lab}</text>')
-    # bars
-    for i,(lb,v) in enumerate(stages):
-        x=X(i,n)-bw/2; y=Y(v); h=Y(0)-y
-        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{h:.1f}" rx="3" fill="{NAVY}"/>')
-        s.append(f'<text x="{X(i,n):.1f}" y="{y-7:.1f}" text-anchor="middle" font-size="12" font-weight="700" fill="{NAVY}">{v:,}</text>')
-        s.append(f'<text x="{X(i,n):.1f}" y="{H-B+20:.1f}" text-anchor="middle" font-size="12.5" fill="{GRAPH}">{lb}</text>')
-    s.append(f'<text x="{L-46}" y="{T+2}" font-size="11.5" fill="{SLATE}" transform="rotate(-90 {L-46} {(H)/2})">Illustrative cumulative AUM (US$m)</text>')
+        s.append(f'<line x1="{x0}" y1="{y:.1f}" x2="{x1}" y2="{y:.1f}" stroke="#eceef1" stroke-width="1"/>')
+        s.append(f'<text x="{x0-10}" y="{y+4:.1f}" text-anchor="end" font-size="12" fill="{SLATE}">{gv:,}</text>')
+    s.append(f'<text x="18" y="{(T+H-B)/2:.0f}" font-size="11" fill="{SLATE}" transform="rotate(-90 18 {(T+H-B)/2:.0f})" text-anchor="middle">Illustrative cumulative AUM (US$m)</text>')
+    # x ticks (Start..Year5)
+    for i in range(6):
+        lab="Start" if i==0 else f"Year {i}"
+        s.append(f'<text x="{XY(i):.1f}" y="{H-B+22:.1f}" text-anchor="middle" font-size="12.5" fill="{GRAPH}">{lab}</text>')
+    # vertical "Around Year 5" divider
+    s.append(f'<line x1="{xMid:.1f}" y1="{Y(3000):.1f}" x2="{xMid:.1f}" y2="{Y(0):.1f}" stroke="{GRAPH}" stroke-width="1.2" stroke-dasharray="5 5" opacity=".6"/>')
+    s.append(f'<text x="{xMid:.1f}" y="{Y(3000)-10:.1f}" text-anchor="middle" font-size="12.5" font-weight="700" fill="{GRAPH}">Around Year 5</text>')
+    s.append(f'<text x="{xMid-8:.1f}" y="{Y(250):.1f}" text-anchor="end" font-size="11.5" fill="{SLATE}">30% retained co-investment capacity reached</text>')
+    # build staircase
+    pts=[(x0,Y(0))]
+    for i in range(1,6):
+        pts.append((XY(i),Y(lv[i])))
+        if i<5: pts.append((XY(i)+plat,Y(lv[i])))
+    d="M "+" L ".join(f"{x:.1f} {y:.1f}" for x,y in pts)
+    s.append(f'<path d="{d}" fill="none" stroke="{TEAL}" stroke-width="2.6" stroke-linejoin="round"/>')
+    for i in range(1,6):
+        cx,cy=XY(i),Y(lv[i])
+        s.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="4.5" fill="#fff" stroke="{TEAL}" stroke-width="2.2"/>')
+        s.append(f'<text x="{cx:.1f}" y="{cy-12:.1f}" text-anchor="middle" font-size="12.5" font-weight="700" fill="{NAVY}">{labs[i-1]}</text>')
+    # plateau annotation
+    s.append(f'<text x="{XY(1)+plat/2:.1f}" y="{Y(430):.1f}" font-size="12" font-style="italic" fill="{GOLD}">AUM may plateau for 12&ndash;24 months while warehoused</text>')
+    # three divergence paths from (xMid,2000)
+    paths=[(3000,STEEL,"6 4","20% retained · c.US$3.0bn","Deeper track record and investor demand"),
+           (2000,TEAL,"","30% retained · c.US$2.0bn","No further scale from the same capital base"),
+           (1500,GOLD,"6 4","40% retained · c.US$1.5bn","Higher alignment remains required")]
+    for v,col,dash,lab,sub in paths:
+        da=f'stroke-dasharray="{dash}"' if dash else ''
+        s.append(f'<path d="M {xMid:.1f} {Y(2000):.1f} L {x1:.1f} {Y(v):.1f}" fill="none" stroke="{col}" stroke-width="2.4" {da}/>')
+        s.append(f'<circle cx="{x1:.1f}" cy="{Y(v):.1f}" r="5" fill="#fff" stroke="{col}" stroke-width="2.4"/>')
+        s.append(f'<text x="{x1+12:.1f}" y="{Y(v)-2:.1f}" font-size="13" font-weight="700" fill="{col}">{lab}</text>')
+        s.append(f'<text x="{x1+12:.1f}" y="{Y(v)+15:.1f}" font-size="11.5" fill="{SLATE}">{sub}</text>')
+    # capital-base start dot
+    s.append(f'<circle cx="{x0:.1f}" cy="{Y(0):.1f}" r="4" fill="{TEAL}"/>')
+    # legend + footer captions
+    s.append(f'<line x1="{x1-2:.0f}" y1="{T-24}" x2="{x1+22:.0f}" y2="{T-24}" stroke="{TEAL}" stroke-width="2.6"/>')
+    s.append(f'<text x="{x1+28:.0f}" y="{T-20}" font-size="12" fill="{GRAPH}">AUM supported by the same capital base</text>')
+    s.append(f'<text x="{x0:.1f}" y="{H-8}" font-size="12" fill="{GRAPH}">Deploy &middot; build proof &middot; sell down &middot; redeploy</text>')
+    s.append(f'<text x="{(xMid+x1)/2:.1f}" y="{H-8}" text-anchor="middle" font-size="12" font-style="italic" fill="{SLATE}">Further growth depends on the track record</text>')
     s.append('</svg>')
     return "".join(s)
 
@@ -100,12 +129,13 @@ def slide(inner, cls="", n=""):
     pg=f'<div class="pg">{n}</div>' if n else ''
     return f'<section class="slide {cls}"><div class="stage">{inner}{pg}</div></section>'
 
-LOGO_D='<div class="logo">ARAVEST</div>'
+LOGO_D=f'<img class="logo" src="{LOGO_NAVY_SRC}" alt="Aravest"/>'
+LOGO_W=f'<img class="logo wht" src="{LOGO_WHITE_SRC}" alt="Aravest"/>'
 FOOT='<div class="foot">Private and Confidential</div>'
 
 # 1 COVER
 cover=slide(f'''
-  <div class="cv-brand">ARAVEST</div>
+  <img class="cv-logo" src="{LOGO_WHITE_SRC}" alt="Aravest"/>
   <div class="cv-rule"></div>
   <div class="cv-ey">Private &amp; Confidential · Board Strategy Discussion Paper</div>
   <h1 class="cv-h1">Aravest&rsquo;s <em>Next Phase</em></h1>
@@ -115,7 +145,7 @@ cover=slide(f'''
 
 # 2 CHAPTER DIVIDER
 divider=slide(f'''
-  {LOGO_D}
+  {LOGO_W}
   <div class="dv-no">Chapter I</div>
   <h2 class="dv-h">Institutional Foundation</h2>
   <div class="dv-gold"></div>
@@ -222,13 +252,14 @@ body{{background:#4a5560;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI"
 .stage{{position:relative;width:1280px;height:720px;background:#fff;overflow:hidden;
   box-shadow:0 20px 60px rgba(0,0,0,.35);flex:0 0 auto}}
 .slide.cover .stage,.slide.divider .stage{{background:linear-gradient(135deg,#002147 0%,#002B5C 60%,#0b3a63 100%);color:#fff}}
-.logo{{position:absolute;top:34px;right:44px;font-family:Georgia,serif;letter-spacing:.3em;font-size:15px;color:var(--navy)}}
+.logo{{position:absolute;top:30px;right:44px;height:46px;width:auto}}
+.logo.wht{{filter:none}}
 .foot{{position:absolute;left:44px;bottom:30px;font-size:12.5px;color:var(--slate)}}
 .foot.light{{color:rgba(255,255,255,.7)}}
 .pg{{position:absolute;right:44px;bottom:30px;font-size:12.5px;color:var(--slate)}}
 
 /* cover */
-.cover .cv-brand{{position:absolute;top:40px;left:60px;font-family:Georgia,serif;letter-spacing:.34em;font-size:16px;color:#fff}}
+.cover .cv-logo{{position:absolute;top:44px;left:60px;height:58px;width:auto}}
 .cv-rule{{position:absolute;top:300px;left:62px;width:74px;height:2px;background:var(--gold)}}
 .cv-ey{{position:absolute;top:322px;left:62px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#ded0ad;font-weight:700}}
 .cv-h1{{position:absolute;top:352px;left:60px;font-family:'Spectral',Georgia,serif;font-weight:300;font-size:88px;line-height:1;color:#fff}}
@@ -238,7 +269,7 @@ body{{background:#4a5560;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI"
 .cover .stage:after{{content:"";position:absolute;right:-150px;bottom:-220px;width:560px;height:560px;border:1px solid rgba(200,169,81,.28);transform:rotate(20deg)}}
 
 /* divider */
-.divider .logo{{color:#fff;font-family:Georgia,serif}}
+
 .dv-no{{position:absolute;top:250px;left:62px;font-family:'Spectral',Georgia,serif;font-size:34px;color:rgba(255,255,255,.55)}}
 .dv-h{{position:absolute;top:296px;left:60px;font-family:'Spectral',Georgia,serif;font-weight:300;font-size:60px;color:#fff}}
 .dv-gold{{position:absolute;top:400px;left:62px;width:60px;height:2px;background:var(--gold)}}
@@ -266,9 +297,9 @@ table.mini td{{padding:9px 10px;border-bottom:1px solid var(--mist);vertical-ali
 table.mini td.tn{{font-family:'Spectral',Georgia,serif;color:var(--navy);width:38%}}
 
 /* chart */
-.chartwrap{{position:absolute;top:196px;left:56px;right:56px}}
+.chartwrap{{position:absolute;top:186px;left:56px;right:56px}}
 .chartwrap svg{{display:block}}
-.assume{{position:absolute;top:560px;left:60px;right:60px;font-size:12.5px;color:var(--slate);line-height:1.4}}
+.assume{{position:absolute;top:632px;left:60px;right:60px;font-size:12px;color:var(--slate);line-height:1.4}}
 .assume b{{color:var(--graph)}}
 
 /* deploy table */
