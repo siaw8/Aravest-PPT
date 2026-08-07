@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Aravest’s Next Phase — Board / MAC Paper</title>
+<style>
+:root{
+  --navy:#002147;        /* deep navy — structure, conclusions */
+  --navy2:#002B5C;       /* primary navy — headings */
+  --graphite:#35464F;    /* body / secondary */
+  --slate:#869397;       /* quiet furniture */
+  --teal:#008080;        /* Pathway 1 — Track Record Building */
+  --teal-t:#e8f2f2; --teal-b:#99cccc;
+  --steel:#4682B4;       /* Pathway 2 — Scale Acceleration */
+  --steel-t:#eef4fa; --steel-b:#b5cde1;
+  --gold:#C8A951;        /* rare signal */
+  --line:#dde2e8; --mist:#eef0f2; --paper:#ffffff; --ink:#1f2a33; --white:#fff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Aptos",Arial,sans-serif;
+  font-size:16px;line-height:1.62}
+h1,h2,h3,h4{font-family:Georgia,"Spectral","Times New Roman",serif;color:var(--navy2);font-weight:500;line-height:1.16;margin:0}
+h1{font-size:clamp(2.9rem,6vw,5rem);letter-spacing:-.03em;color:#fff}
+h2{font-size:clamp(1.7rem,3.2vw,2.5rem);letter-spacing:-.02em}
+h3{font-size:1.25rem;margin-bottom:8px}
+h4{font-size:1.02rem}
+p{margin:0 0 .9em}
+strong{color:var(--navy2)}
+em{font-style:italic}
+.shell{width:min(1080px,calc(100% - 40px));margin:0 auto}
+.eyebrow{font-size:.72rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin-bottom:14px}
+
+/* cover */
+.cover{min-height:78vh;display:flex;align-items:center;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#002147 0%,#002B5C 62%,#0b3a63 100%)}
+.cover .inner{position:relative;z-index:2;padding:70px 0}
+.cover .rule{width:70px;height:2px;background:var(--gold);margin:0 0 26px}
+.cover .sub{font-size:clamp(1.1rem,2vw,1.5rem);line-height:1.5;color:rgba(255,255,255,.86);max-width:760px;margin-top:24px}
+.cover .meta{margin-top:30px;color:rgba(255,255,255,.62);font-size:.9rem;letter-spacing:.04em}
+.cover:after{content:"";position:absolute;right:-160px;bottom:-220px;width:520px;height:520px;
+  border:1px solid rgba(200,169,81,.28);transform:rotate(20deg)}
+.brand{position:absolute;top:34px;left:0;right:0;z-index:3}
+.brand .shell{display:flex;justify-content:space-between;align-items:center;color:#fff;
+  font-family:Georgia,serif;letter-spacing:.34em;font-size:.9rem;text-transform:uppercase}
+.brand .cf{font-family:inherit;letter-spacing:.12em;font-size:.66rem;color:rgba(255,255,255,.7)}
+
+/* sticky nav */
+.toc{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.toc .shell{display:flex;gap:22px;overflow-x:auto;white-space:nowrap;padding:12px 0;scrollbar-width:none}
+.toc a{text-decoration:none;color:var(--graphite);font-size:.82rem;font-weight:600}
+.toc a .n{color:var(--gold);font-weight:800;margin-right:5px}
+
+main{padding:40px 0 90px}
+.section{padding:52px 0 8px;border-top:1px solid var(--line)}
+.section:first-child{border-top:0}
+.sec-no{font-size:.74rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.lead{font-size:1.12rem;color:var(--navy2);max-width:880px;margin-bottom:6px}
+.sub-lead{color:var(--graphite);max-width:880px}
+
+/* section divider band */
+.divider{background:linear-gradient(135deg,#002147,#002B5C);color:#fff;border-radius:14px;padding:34px 38px;margin:30px 0 8px;display:flex;align-items:baseline;gap:20px}
+.divider .dn{font-family:Georgia,serif;font-size:2.4rem;color:rgba(255,255,255,.55)}
+.divider h2{color:#fff}
+.divider p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:.98rem}
+
+/* generic blocks */
+.core{background:linear-gradient(135deg,#002147,#002B5C);color:#fff;border-radius:12px;padding:26px 30px;margin:22px 0}
+.core h3,.core strong{color:#fff}
+.core p:last-child{margin-bottom:0}
+.bigline{font-family:Georgia,serif;font-size:clamp(1.25rem,2.4vw,1.7rem);line-height:1.34;color:var(--navy2);
+  padding:20px 26px;border-left:3px solid var(--gold);background:#fff;box-shadow:0 8px 24px rgba(0,33,71,.06);margin:22px 0}
+.note{color:var(--graphite);font-size:.9rem;border-left:3px solid var(--teal-b);padding:10px 16px;margin:16px 0;background:#fbfdfd}
+
+.grid{display:grid;gap:18px;margin:22px 0}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 22px;box-shadow:0 4px 16px rgba(0,33,71,.04)}
+.card .tag{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.card p:last-child{margin-bottom:0}
+.card.p1{background:var(--teal-t);border-color:var(--teal-b)}
+.card.p1 .tag{color:var(--teal)}
+.card.p2{background:var(--steel-t);border-color:var(--steel-b)}
+.card.p2 .tag{color:var(--steel)}
+.card.tl{border-top:3px solid var(--graphite)}
+.card.tl.hl{border-top-color:var(--teal);background:var(--teal-t);border-color:var(--teal-b)}
+.card .yr{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--slate)}
+.card.tl.hl .yr{color:var(--teal)}
+
+table{width:100%;border-collapse:collapse;background:#fff;margin:20px 0;font-size:.92rem;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{background:var(--navy2);color:#fff;font-weight:600;font-size:.86rem}
+tbody tr:last-child td{border-bottom:0}
+td.rowlab,th.rowlab{width:22%;font-family:Georgia,serif}
+tbody td.rowlab{font-weight:700;color:var(--navy2)}
+thead th.rowlab{color:#fff}
+.th-p1{color:#bfe3e3}.th-p2{color:#cfe0f0}
+
+/* flow / process */
+.flow{display:flex;gap:0;align-items:stretch;margin:22px 0;flex-wrap:wrap}
+.step{flex:1;min-width:150px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:16px 16px;position:relative;margin-right:26px}
+.step:last-child{margin-right:0}
+.step:not(:last-child):after{content:"→";position:absolute;right:-20px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:1.2rem;font-weight:800}
+.step .sn{font-family:Georgia,serif;color:var(--slate);font-size:.9rem}
+.step h4{margin:4px 0 4px}
+.step.p1{background:var(--teal-t);border-color:var(--teal-b)}
+.step small{color:var(--graphite);display:block;line-height:1.4}
+.chain{display:flex;gap:0;flex-wrap:wrap;margin:16px 0}
+.chain .lk{flex:1;min-width:150px;padding:12px 14px;border-radius:8px;margin-right:24px;position:relative;font-size:.9rem;font-weight:600;text-align:center;color:#fff}
+.chain .lk:last-child{margin-right:0}
+.chain .lk:not(:last-child):after{content:"→";position:absolute;right:-18px;top:50%;transform:translateY(-50%);font-weight:800}
+.chain.bad .lk{background:var(--graphite)}.chain.bad .lk:after{color:var(--graphite)}
+.chain.good .lk{background:var(--teal)}.chain.good .lk:after{color:var(--teal)}
+
+/* deal cards */
+.deal{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:16px 0;background:#fff;box-shadow:0 4px 16px rgba(0,33,71,.04)}
+.deal .hd{padding:16px 20px;border-bottom:1px solid var(--line)}
+.deal.p1 .hd{background:var(--teal-t);border-bottom-color:var(--teal-b)}
+.deal.p2 .hd{background:var(--steel-t);border-bottom-color:var(--steel-b)}
+.deal .pw{font-size:.68rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+.deal.p1 .pw{color:var(--teal)}.deal.p2 .pw{color:var(--steel)}
+.deal .pj{font-family:Georgia,serif;font-size:1.16rem;color:var(--navy2);margin:5px 0 0}
+.deal .eq{float:right;font-family:Georgia,serif;font-weight:700;color:var(--navy2);font-size:1.12rem;
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:3px 14px}
+.deal .bd{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.deal .bd .full{grid-column:1/-1}
+.deal .bd h5{margin:0 0 4px;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--slate)}
+.deal .bd p{margin:0;font-size:.92rem;color:var(--graphite)}
+.deal ul{margin:.2em 0 0;padding-left:1.1em}
+.deal li{margin:.3em 0;font-size:.9rem;color:var(--graphite)}
+
+/* structure chain */
+.struct{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:20px 0;justify-content:center}
+.struct .node{border:1px solid var(--line);border-radius:9px;padding:12px 16px;text-align:center;font-weight:600;
+  color:var(--navy2);font-size:.9rem;background:#fbfcfd;margin-right:30px;position:relative}
+.struct .node:last-child{margin-right:0}
+.struct .node:not(:last-child):after{content:"→";position:absolute;right:-22px;top:50%;transform:translateY(-50%);color:var(--gold);font-weight:800}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.three div{background:var(--navy);color:#fff;border-radius:9px;padding:15px;text-align:center;font-weight:600;font-size:.92rem}
+.exception{background:#fbf6ea;border:1px solid #e6d5a8;border-radius:10px;padding:18px 22px;margin:20px 0}
+.exception strong{display:block;margin-bottom:4px;color:var(--navy2)}
+
+.closing{background:linear-gradient(135deg,#002147,#002B5C);color:#fff;border-radius:14px;padding:36px 40px;margin:34px 0 0}
+.closing h2{color:#fff;margin-bottom:20px}
+.closing ol{list-style:none;counter-reset:c;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:18px 34px}
+.closing li{counter-increment:c;position:relative;padding-left:52px;font-size:1.02rem;color:rgba(255,255,255,.92)}
+.closing li:before{content:counter(c,decimal-leading-zero);position:absolute;left:0;top:-4px;font-family:Georgia,serif;font-size:1.5rem;color:var(--gold)}
+
+.footer{background:var(--navy);color:rgba(255,255,255,.75);padding:34px 0;font-size:.86rem;margin-top:50px}
+.footer strong{color:#fff}
+.pnote{color:var(--slate);font-size:.8rem;margin-top:8px}
+
+@media(max-width:820px){
+  .g2,.g3,.deal .bd,.closing ol{grid-template-columns:1fr}
+  .flow,.chain,.struct{flex-direction:column}
+  .step,.chain .lk,.struct .node{margin-right:0;margin-bottom:26px}
+  .step:not(:last-child):after,.chain .lk:not(:last-child):after,.struct .node:not(:last-child):after{content:"↓";right:50%;top:auto;bottom:-22px;transform:translateX(50%)}
+}
+@media print{
+  .toc{display:none}body{font-size:11pt}
+  .cover{min-height:0;padding:40px 0}
+  .section{page-break-inside:avoid}
+  .card,.core,.deal,table,.divider,.closing{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="brand"><div class="shell"><span>Aravest</span><span class="cf">Private &amp; Confidential</span></div></div>
+  <div class="shell inner">
+    <div class="eyebrow" style="color:#ded0ad">Board / Management Paper · May 2024</div>
+    <h1>Aravest’s Next Phase</h1>
+    <div class="rule"></div>
+    <p class="sub">Build a credible post-SMFL track record and institutional platform for long-term growth.</p>
+    <div class="meta">Aravest Pte Ltd · Private &amp; Confidential</div>
+  </div>
+</header>
+
+<nav class="toc"><div class="shell">
+  <a href="#intro"><span class="n">·</span>Introduction</a>
+  <a href="#s1"><span class="n">01</span>Institutional Foundation</a>
+  <a href="#s2"><span class="n">02</span>Proofing</a>
+  <a href="#s3"><span class="n">03</span>Pathways in Practice</a>
+  <a href="#s4"><span class="n">04</span>Investment Framework</a>
+  <a href="#focus"><span class="n">·</span>Continuing Focus</a>
+</div></nav>
+
+<main class="shell">
+
+<!-- INTRODUCTION -->
+<section class="section" id="intro">
+  <div class="sec-no">Introduction</div>
+  <h2>With integration substantially complete, Aravest’s next phase is institution-building.</h2>
+  <p class="lead" style="margin-top:16px">Aravest has maintained platform continuity, strengthened governance and begun executing under SMFL ownership.</p>
+  <p class="sub-lead">The next priority is to establish the post-SMFL investment record required to support investor confidence and long-term growth.</p>
+  <div class="eyebrow" style="margin-top:26px">This paper sets out three things</div>
+  <div class="grid g3">
+    <div class="card"><span class="tag">01</span><h3>The institution Aravest is building</h3><p>The Aravest Way — the standards that remain constant as the platform grows.</p></div>
+    <div class="card"><span class="tag">02</span><h3>Why transaction execution is the immediate priority</h3><p>Transactions create the post-SMFL evidence investors require.</p></div>
+    <div class="card"><span class="tag">03</span><h3>How two parallel pathways develop the platform</h3><p>Track Record Building and Scale Acceleration, pursued simultaneously.</p></div>
+  </div>
+</section>
+
+<!-- SECTION 01 -->
+<section class="section" id="s1">
+  <div class="divider"><div class="dn">01</div><div><h2>Institutional Foundation</h2><p>The standards, philosophy and identity that remain constant as the platform grows.</p></div></div>
+
+  <h3 style="margin-top:36px;font-size:1.5rem">Development pathway</h3>
+  <p class="lead">From 2027 to 2029, the primary focus is to build the post-SMFL track record required to prove Aravest’s investment capability.</p>
+  <p class="sub-lead">The priority is to complete multiple transactions, demonstrate outcomes through the investment lifecycle and establish repeatability — the foundation for future institutional capital formation and scale.</p>
+  <div class="grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="card tl"><div class="yr">2025</div><h4>Integrate &amp; begin proving</h4><p>Complete the initial integration, maintain platform continuity and begin demonstrating execution under SMFL ownership.</p></div>
+    <div class="card tl"><div class="yr">2026</div><h4>Establish institutional identity</h4><p>Introduce The Aravest Way, deepen governance and investment discipline, continue building visible post-SMFL evidence.</p></div>
+    <div class="card tl hl"><div class="yr">2027–2029</div><h4>Build proof through transaction track record</h4><p>Complete selected transactions, demonstrate investment outcomes and establish repeatability across defined strategies.</p></div>
+    <div class="card tl"><div class="yr">~2030 onward</div><h4>Convert proof into scale</h4><p>Use the accumulated track record to raise larger and more repeatable pools of institutional capital.</p></div>
+  </div>
+  <p class="note">The timing is directional. The pace of proof-building will depend on transaction execution, market conditions and the availability of suitable opportunities.</p>
+
+  <h3 style="margin-top:44px;font-size:1.5rem">The Aravest Way</h3>
+  <p class="lead">The Aravest Way sets the standards for how Aravest conducts its business and invests.</p>
+  <div class="bigline">Transactions establish the investment record. Consistent judgement, conduct and accountability establish the institution.</div>
+  <div class="core"><h4 style="letter-spacing:.1em;text-transform:uppercase;font-size:.72rem;color:#ded0ad;margin-bottom:6px">Our first principle</h4>
+    <p style="font-family:Georgia,serif;font-size:1.35rem;margin:0">Investment management is a responsibility before it is a business.</p></div>
+  <div class="eyebrow" style="margin-top:24px">Our values — how we conduct our business</div>
+  <div class="grid g3">
+    <div class="card"><span class="tag">Excellence</span><h3>The quality of our thinking</h3><p>Apply disciplined analysis, preparation, execution and communication, and continually raise the standard expected of the platform.</p></div>
+    <div class="card"><span class="tag">Trust</span><h3>The way we behave</h3><p>Act with integrity, transparency and fairness toward investors, shareholders, partners, lenders and colleagues, particularly when circumstances are difficult.</p></div>
+    <div class="card"><span class="tag">Accountability</span><h3>How we take ownership</h3><p>Own decisions and outcomes, respond when the facts change and remain responsible through the full investment lifecycle.</p></div>
+  </div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem">Investment philosophy</h3>
+  <p class="lead">How the values are applied to investing.</p>
+  <table>
+    <thead><tr><th class="rowlab">Investment principle</th><th>Application</th></tr></thead>
+    <tbody>
+      <tr><td class="rowlab">Recognising Value</td><td>Identify genuine value gaps, form an independent judgement and define how value will be realised.</td></tr>
+      <tr><td class="rowlab">Partnership</td><td>Define where Aravest adds value and secure partners for the other capabilities the investment requires.</td></tr>
+      <tr><td class="rowlab">Stewardship of Capital</td><td>Manage capital through the full investment lifecycle with responsibility for capital preservation and value creation.</td></tr>
+      <tr><td class="rowlab">Risk &amp; Resilience</td><td>Identify risk, accept it deliberately, build resilience and adapt when the facts change.</td></tr>
+      <tr><td class="rowlab">Fit for Purpose</td><td>Keep the principles constant and tailor the structure and strategy to each investment.</td></tr>
+    </tbody>
+  </table>
+  <div class="eyebrow">Why this matters for long-term growth</div>
+  <div class="grid g3">
+    <div class="card p1"><h4>Consistency as the platform grows</h4><p>A common constitution enables consistent standards across countries and strategies as the platform grows.</p></div>
+    <div class="card p2"><h4>Trust with investors and partners</h4><p>A clear basis for understanding how Aravest will act through the full investment lifecycle.</p></div>
+    <div class="card"><h4>Repeatability without dilution</h4><p>Codified principles allow Aravest to repeat and scale strategies without diluting institutional standards or identity.</p></div>
+  </div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem">Values-led. Value-focused.</h3>
+  <p class="lead">The Aravest Way governs how we invest; identifiable value determines where we deploy.</p>
+  <div class="grid g2">
+    <div class="card p1"><span class="tag">Values-led</span><h3>The standards remain constant</h3>
+      <ul><li><strong>Excellence:</strong> disciplined thinking, underwriting and execution.</li>
+      <li><strong>Trust:</strong> alignment, transparency and institutional governance.</li>
+      <li><strong>Accountability:</strong> ownership of decisions, risks and investment outcomes.</li></ul></div>
+    <div class="card p2"><span class="tag">Value-focused</span><h3>Deployment follows identifiable value</h3>
+      <ul><li>A genuine value gap, mispricing or market dislocation.</li>
+      <li>A clear and executable value-creation plan.</li>
+      <li>Complete capabilities, internally or through secured partners.</li>
+      <li>A credible route to stabilisation, investor participation or eventual exit.</li></ul></div>
+  </div>
+  <div class="bigline">Aravest will remain sector agnostic, but every investment must have an identifiable value opportunity, an executable business plan and complete capability coverage.</div>
+</section>
+
+<!-- SECTION 02 -->
+<section class="section" id="s2">
+  <div class="divider"><div class="dn">02</div><div><h2>Proofing</h2><p>Why transaction execution is the immediate priority, and the two pathways and warehousing that make it possible.</p></div></div>
+
+  <h3 style="margin-top:36px;font-size:1.5rem">Building the post-SMFL track record</h3>
+  <p class="lead">Investors require repeated evidence of execution and outcomes. Transactions create that evidence.</p>
+  <p class="sub-lead">Investors require evidence that Aravest can exercise investment judgement, execute the business plan and deliver outcomes under SMFL ownership.</p>
+  <div class="eyebrow" style="margin-top:22px">What each transaction must demonstrate</div>
+  <div class="flow">
+    <div class="step"><div class="sn">1</div><h4>Investment judgement</h4><small>Macro view · sector preference · deal screening &amp; selection</small></div>
+    <div class="step"><div class="sn">2</div><h4>Transaction execution</h4><small>Underwrite, secure and complete</small></div>
+    <div class="step"><div class="sn">3</div><h4>Unlocking value</h4><small>Execute the business plan</small></div>
+    <div class="step"><div class="sn">4</div><h4>Investment outcome</h4><small>Demonstrate performance and, where applicable, realisation</small></div>
+  </div>
+  <div class="eyebrow">How transaction evidence becomes an investable track record</div>
+  <div class="flow">
+    <div class="step p1"><h4>One transaction</h4><small><strong>A proof point.</strong> Demonstrates Aravest’s judgement and execution on a specific investment.</small></div>
+    <div class="step p1"><h4>Multiple transactions</h4><small><strong>A track record.</strong> Builds a body of post-SMFL evidence across investment outcomes and market conditions.</small></div>
+    <div class="step p1"><h4>Repeatable strategy</h4><small><strong>A basis for capital formation.</strong> Gives investors the proof required for repeat commitments and, over time, discretionary capital.</small></div>
+  </div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem">Two parallel pathways</h3>
+  <p class="lead">Aravest will pursue both pathways simultaneously to build proof and develop the platform.</p>
+  <table>
+    <thead><tr><th class="rowlab"></th><th class="th-p1">Pathway 1 — Track Record Building</th><th class="th-p2">Pathway 2 — Scale Acceleration</th></tr></thead>
+    <tbody>
+      <tr><td class="rowlab">Primary purpose</td><td>Build multiple proof points and establish repeatability across defined strategies.</td><td>Build a major proof point while accelerating AUM and institutional relevance.</td></tr>
+      <tr><td class="rowlab">Typical opportunity</td><td>Transactions that can be pursued within the existing sponsor-capital programme, allowing capital to be diversified across several investments. Typically, limited equity investment requirements.</td><td>Transactions whose scale, asset quality or strategic significance requires a separate capital decision and can support meaningful institutional participation. Typically, large equity investment requirements.</td></tr>
+      <tr><td class="rowlab">Capital profile</td><td>Existing USD 300M support can be deployed across several investments.</td><td>Requires transaction-specific capital that may be materially greater than the existing programme.</td></tr>
+      <tr><td class="rowlab">Risk profile</td><td>Lower single-asset concentration because capital is spread across several investments.</td><td>Higher single-asset concentration and transaction-specific capital exposure.</td></tr>
+      <tr><td class="rowlab">Expected AUM effect</td><td>AUM may grow gradually, remain flat or decline temporarily.</td><td>A single transaction may produce a material or step-change increase in AUM.</td></tr>
+    </tbody>
+  </table>
+  <div class="core"><p style="margin:0">Each Scale Acceleration opportunity will be presented separately to the Board, and any capital commitment will remain entirely at the Board’s discretion on a case-by-case basis.</p></div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem"><span style="color:var(--teal)">Pathway 1</span> — Track Record Building</h3>
+  <p class="lead">Deploy the existing USD 300M support across several transactions to build multiple proof points and diversify investment risk.</p>
+  <div class="flow">
+    <div class="step p1"><div class="sn">1</div><h4>Establish the fund and acquire</h4></div>
+    <div class="step p1"><div class="sn">2</div><h4>Execute the business plan</h4></div>
+    <div class="step p1"><div class="sn">3</div><h4>Establish investment evidence</h4></div>
+    <div class="step p1"><div class="sn">4</div><h4>Introduce investors into the fund</h4></div>
+    <div class="step p1"><div class="sn">5</div><h4>Release capital where possible</h4></div>
+  </div>
+  <p class="sub-lead">The primary objective is to establish a diversified body of post-SMFL investment evidence. Capital recycling remains important because sponsor capital is finite, but it may take time. The immediate priority is to create the investment record from which longer-term capital efficiency can develop.</p>
+  <p class="sub-lead">Each transaction will be structured as a fund from the outset. Once the investment and business plan are sufficiently established, Aravest will seek to introduce investors through either a single-asset structure or an aggregated portfolio. This may release sponsor capital for subsequent deployment, but the timing will depend on investor demand.</p>
+
+  <h4 style="margin-top:30px;font-size:1.2rem">Product creation for Pathway 1</h4>
+  <p class="sub-lead">Two routes for bringing investors into completed transactions.</p>
+  <table>
+    <thead><tr><th class="rowlab"></th><th>Single-asset fund or SMA</th><th>Portfolio fund</th></tr></thead>
+    <tbody>
+      <tr><td class="rowlab">Approach</td><td>Introduce one or more investors into the fund holding a specific investment.</td><td>Aggregate related investments under a defined strategy, then introduce investors into a portfolio fund.</td></tr>
+      <tr><td class="rowlab">Timing</td><td>May occur earlier once the asset and business plan are sufficiently established.</td><td>Requires more time because Aravest must first assemble a portfolio of sufficient scale and coherence.</td></tr>
+      <tr><td class="rowlab">Investor relevance</td><td>The ticket may suit family offices and smaller institutions but may be below the minimum required by large institutions.</td><td>Scale and diversification make the portfolio more relevant to larger institutional investors — for example, pension and sovereign wealth funds.</td></tr>
+      <tr><td class="rowlab">Strategic benefit</td><td>Creates an individual post-SMFL proof point and may release sponsor capital earlier.</td><td>Creates multiple proof points, demonstrates repeatability and can establish larger, more durable AUM with greater institutional relevance.</td></tr>
+      <tr><td class="rowlab">Sponsor capital duration</td><td>Potentially shorter.</td><td>Potentially longer while the portfolio is assembled.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:44px;font-size:1.5rem"><span style="color:var(--steel)">Pathway 2</span> — Scale Acceleration</h3>
+  <p class="lead">Pursue selected institutional-scale opportunities that can create a major proof point, materially increase AUM and attract large institutional investors.</p>
+  <div class="grid g2">
+    <div class="card p2"><span class="tag">Strategic benefits</span>
+      <ul><li><strong>Major proof point:</strong> a significant transaction demonstrates that Aravest can secure, execute and manage an institutional-quality investment under SMFL ownership.</li>
+      <li><strong>Material AUM growth:</strong> one transaction can add the AUM that would otherwise require several Pathway 1 investments.</li>
+      <li><strong>Wider investor pool:</strong> asset quality and ticket size make the opportunity relevant to large institutional investors.</li>
+      <li><strong>Faster platform development:</strong> successful execution strengthens fundraising credibility and institutional relevance.</li></ul></div>
+    <div class="card"><span class="tag">Capital and risk implications</span>
+      <ul><li><strong>Higher capital requirement:</strong> the opportunity may require capital materially beyond the existing USD 300M programme.</li>
+      <li><strong>Higher concentration:</strong> a larger amount of capital is exposed to one asset, market and business plan.</li></ul></div>
+  </div>
+  <p class="note">Scale Acceleration complements, rather than replaces, Track Record Building. The quality of the asset and the scale of the opportunity can create a wider investor pool, particularly among large institutions that require meaningful deployment capacity.</p>
+
+  <h3 style="margin-top:44px;font-size:1.5rem">Warehousing is essential</h3>
+  <p class="lead">Warehousing is essential to secure transactions and build the track record.</p>
+  <p class="sub-lead">Seller execution and investor diligence operate on different timetables. Sellers require committed capital and transaction certainty, while investors require time and generally prefer to assess a sufficiently secured opportunity. Warehousing bridges this timing gap.</p>
+  <div class="grid g2">
+    <div class="card"><span class="tag">Investor timetable</span><h4>Investors require diligence and a sufficiently secured opportunity</h4><p>Investors need time to assess the asset, business plan, manager, structure and risk. Many will not commit until the opportunity is sufficiently advanced or secured.</p></div>
+    <div class="card"><span class="tag">Transaction timetable</span><h4>Sellers require committed funding and execution certainty</h4><p>Competitive transactions must close within the seller’s timetable, often before an institutional fundraising process can be completed.</p></div>
+  </div>
+  <div class="bigline">Warehousing provides the committed acquisition capital required to secure and complete transactions before third-party capital is available.</div>
+  <p class="lead" style="margin-top:26px">Without warehousing, Aravest cannot reliably secure transactions or establish the track record required to raise institutional capital.</p>
+  <div class="eyebrow">Without warehousing</div>
+  <div class="chain bad">
+    <div class="lk">No committed acquisition capital</div>
+    <div class="lk">No executable transaction</div>
+    <div class="lk">No post-SMFL proof</div>
+    <div class="lk">No credible basis for future fundraising</div>
+  </div>
+  <div class="eyebrow" style="margin-top:18px">With warehousing</div>
+  <div class="chain good">
+    <div class="lk">Secure and complete transactions</div>
+    <div class="lk">Execute the business plan</div>
+    <div class="lk">Establish post-SMFL proof</div>
+    <div class="lk">Raise third-party capital for the fund and future strategies</div>
+  </div>
+</section>
+
+<!-- SECTION 03 -->
+<section class="section" id="s3">
+  <div class="divider"><div class="dn">03</div><div><h2>The Pathways in Practice</h2><p>Completed transactions and current pipeline that illustrate how the two pathways operate.</p></div></div>
+
+  <h3 style="margin-top:36px;font-size:1.5rem">How the two pathways work</h3>
+  <p class="lead">Example of completed transactions: Project Marlin and Conrad Seoul illustrate how the two pathways operate in practice.</p>
+
+  <div class="deal p1">
+    <div class="hd"><span class="eq">Equity USD 60M</span><div class="pw">Pathway 1 · Track Record Building example</div><div class="pj">Project Marlin — Hotel Miramar to DoubleTree by Hilton</div></div>
+    <div class="bd">
+      <p class="full">Aravest acquired Hotel Miramar through an Aravest-managed fund with Wee Hur as the initial investor and partner. The hotel is undergoing a comprehensive AEI ahead of its rebranding as DoubleTree by Hilton Singapore Robertson Quay.</p>
+      <div><h5>Transaction execution</h5><p>The acquisition has been completed and the AEI is now in progress.</p></div>
+      <div><h5>Investment evidence</h5><p>Delivery of the AEI, rebranding, operating performance and cash yield will provide visible post-SMFL proof.</p></div>
+      <div><h5>Single-asset capital formation</h5><p>Post-AEI, the stabilised hotel is expected to be more institutionally investable; the initial investor pool is likely to comprise family offices and smaller institutions.</p></div>
+      <div><h5>Portfolio potential</h5><p>May seed a broader hospitality and living portfolio, widening the future institutional investor pool.</p></div>
+    </div>
+  </div>
+
+  <div class="deal p2">
+    <div class="hd"><span class="eq">Equity USD 140M</span><div class="pw">Pathway 2 · Scale Acceleration example</div><div class="pj">Conrad Seoul — institutional scale and investor relevance</div></div>
+    <div class="bd">
+      <p class="full">Sponsor-supported capital enabled Aravest to secure and complete the acquisition. The quality of the asset and scale of the transaction created relevance for a wider pool of investors, including large institutions.</p>
+      <div><h5>Transaction execution</h5><p>Warehousing provided the certainty required to secure a significant institutional-quality asset.</p></div>
+      <div><h5>Institutional participation</h5><p>Following acquisition, GIC and M&amp;G entered the investment at meaningful ticket sizes.</p></div>
+      <div><h5>Continuity of management</h5><p>Aravest continued to manage the investment as sponsor capital was released.</p></div>
+      <div><h5>Pathway evidence</h5><p>Demonstrates how scale and asset quality can accelerate AUM, institutional relevance and the post-SMFL record.</p></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem"><span style="color:var(--teal)">Pathway 1</span> pipeline opportunities</h3>
+  <p class="sub-lead"><strong>Track Record Building</strong> — build multiple proof points and establish repeatability across defined strategies. <em>Examples of pipeline transactions:</em></p>
+  <div class="deal p1">
+    <div class="hd"><span class="eq">Equity USD 35M</span><div class="pw">Opportunity</div><div class="pj">Project Eagles — Courtyard by Marriott, Suwon, Korea</div></div>
+    <div class="bd">
+      <div><h5>Transaction profile</h5><p>Potential acquisition of an operating, 288-room hotel strategically located near the Samsung headquarters in Suwon. This is an off-market transaction secured at favourable acquisition pricing.</p></div>
+      <div><h5>Strategic role</h5><p>A high-quality, well-located hotel that can add a post-SMFL hospitality proof point within the existing capital programme and support subsequent single-asset capital formation.</p></div>
+    </div>
+  </div>
+  <div class="deal p1">
+    <div class="hd"><span class="eq">Equity USD 20M</span><div class="pw">Opportunity</div><div class="pj">Project Braves — Brisbane PBSA</div></div>
+    <div class="bd">
+      <div><h5>Transaction profile</h5><p>Potential acquisition and development of a purpose-built student accommodation (PBSA) project in Brisbane.</p></div>
+      <div><h5>Strategic role</h5><p>This asset will form part of a broader PBSA strategy for Aravest, which aims to aggregate a portfolio of highly sought-after PBSA assets across Australia.</p></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem"><span style="color:var(--steel)">Pathway 2</span> pipeline opportunities</h3>
+  <p class="sub-lead"><strong>Scale Acceleration</strong> — build a major proof point while accelerating AUM and institutional relevance. <em>Examples of pipeline transactions:</em></p>
+  <div class="deal p2">
+    <div class="hd"><span class="eq">Equity USD 500M</span><div class="pw">Opportunity</div><div class="pj">Project Falcon — Marina One</div></div>
+    <div class="bd">
+      <div><h5>Transaction profile</h5><p>Potential joint venture with Hongkong Land to pursue the acquisition of Marina One, a landmark integrated development located in Singapore’s Marina Bay CBD.</p></div>
+      <div><h5>Strategic role</h5><p>Asset quality and transaction scale can create a major post-SMFL proof point, deliver a material increase in AUM and support participation by large institutional investors.</p></div>
+    </div>
+  </div>
+  <div class="deal p2">
+    <div class="hd"><span class="eq">Equity USD 180M</span><div class="pw">Opportunity</div><div class="pj">Project Guardians — GR.iD Redevelopment</div></div>
+    <div class="bd">
+      <div><h5>Transaction profile</h5><p>Potential distressed acquisition and redevelopment of an underperforming shopping centre, transforming it into a flagship purpose-built student accommodation project in Singapore.</p></div>
+      <div><h5>Strategic role</h5><p>Major track-record building in the living sector. The Gross Asset Value (GAV) of the project upon completion is projected to exceed USD 600M, positioning it to serve as an anchor asset for a future Aravest living REIT.</p></div>
+    </div>
+  </div>
+  <div class="deal p2">
+    <div class="hd"><span class="eq">Equity USD 300M</span><div class="pw">Opportunity</div><div class="pj">Project Slingers — Telok Ayer Hotel Development</div></div>
+    <div class="bd">
+      <div><h5>Transaction profile</h5><p>A jointly branded Singapore Hospitality Development Fund in partnership with City Developments Limited (CDL) to acquire a prime land site in core Raffles Place. The strategic plan is to warehouse the acquisition and execute a joint sell-down with CDL post-acquisition.</p></div>
+      <div><h5>Strategic role</h5><p>This acquisition will serve as a cornerstone of a broader, long-term partnership with CDL in Singapore’s hospitality sector.</p></div>
+    </div>
+  </div>
+  <p class="pnote">Transaction names, figures and status are indicative and should be refreshed by the relevant transaction teams before Board circulation.</p>
+</section>
+
+<!-- SECTION 04 -->
+<section class="section" id="s4">
+  <div class="divider"><div class="dn">04</div><div><h2>Investment Framework</h2><p>Where and why Aravest invests, and the institutional standards applied to every structure.</p></div></div>
+
+  <h3 style="margin-top:36px;font-size:1.5rem">Value creation</h3>
+  <p class="lead">Sector and asset selection identifies <em>where</em> we invest; the value-creation plan determines <em>why</em> and <em>how</em> we invest.</p>
+  <table>
+    <thead><tr><th class="rowlab">Value-creation playbook</th><th>Typical application</th></tr></thead>
+    <tbody>
+      <tr><td class="rowlab">Repositioning &amp; Lease-up</td><td>Improve occupancy, tenant mix, rental performance and market positioning.</td></tr>
+      <tr><td class="rowlab">Asset Enhancement &amp; Conversion</td><td>Undertake refurbishment, AEI, change of use or physical repositioning.</td></tr>
+      <tr><td class="rowlab">Development / Redevelopment</td><td>Ground-up development or material redevelopment where the development capability and risk controls are established.</td></tr>
+      <tr><td class="rowlab">Operational Improvement</td><td>Improve performance through stronger management, branding, service delivery or specialist operating partners.</td></tr>
+      <tr><td class="rowlab">Market or Capital Dislocation</td><td>Invest where pricing, ownership constraints, refinancing pressure or capital scarcity create an attractive entry point.</td></tr>
+      <tr><td class="rowlab">Aggregation &amp; Portfolio Formation</td><td>Combine related investments into portfolios or repeatable strategies capable of attracting institutional capital.</td></tr>
+    </tbody>
+  </table>
+  <div class="core"><h4 style="letter-spacing:.08em;text-transform:uppercase;font-size:.72rem;color:#ded0ad;margin-bottom:8px">A capability-driven investment strategy</h4>
+    <p>Capability coverage of Aravest and our partners will drive our investment decisions. Aravest will proceed only when every capability required for deal origination, underwriting, financing, development, operations, asset management and realisation is covered internally or through secured partners.</p>
+    <p style="margin-bottom:0"><strong style="color:#fff">Aravest does not need to perform every function internally.</strong> It must secure the complete capability set and remain accountable for the outcome. For development, hospitality operations, data centres and other specialist activities, the required partner must generally be identified and sufficiently secured before investment commitment.</p></div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem">Near-term investment focus</h3>
+  <p class="lead">Deployment focus: opportunities with distinctive value propositions that Aravest has the capability to execute.</p>
+  <p class="sub-lead">This focus guides origination and capability development without fixed capital-allocation weightage. Every transaction must continue to demonstrate an identifiable value opportunity and an executable business plan.</p>
+  <div class="grid g3">
+    <div class="card tl"><span class="tag">Established sectors</span><h3>Commercial</h3>
+      <p><strong>Strategic role.</strong> Aravest’s principal investment base, supported by long-term experience, local market knowledge and proven asset-management capability.</p>
+      <p><strong>Approach.</strong> Prioritise opportunities where repositioning, lease-up, AEI, redevelopment or market dislocation can create a clear and defensible value proposition.</p></div>
+    <div class="card p1"><span class="tag">Near-term target priorities</span><h3>Living &amp; Lodging</h3>
+      <p><strong>Strategic role.</strong> Build repeatable strategies in sectors supported by structural demand and where operating capability can improve investment outcomes.</p>
+      <p><strong>Approach.</strong> Pursue selectively through experienced operating, development or local partners, with clear alignment and complete capability coverage.</p></div>
+    <div class="card p2"><span class="tag">Invest-led opportunities</span><h3>Special Situations, Bespoke Products &amp; Emerging Sectors <span style="font-weight:400;color:var(--slate)">(e.g. Data Centres)</span></h3>
+      <p><strong>Strategic role.</strong> Investor-led opportunities where market dislocation creates a compelling value case.</p>
+      <p><strong>Approach.</strong> Consider where the value case is compelling and the required specialist development, operating and technical capabilities are identified and secured.</p></div>
+  </div>
+
+  <h3 style="margin-top:44px;font-size:1.5rem">Institutional structuring principles</h3>
+  <p class="lead">The institutional standards applied to every Aravest structure.</p>
+  <div class="struct">
+    <div class="node">Investors</div>
+    <div class="node">Fund vehicle</div>
+    <div class="node">Investment SPV / borrower</div>
+    <div class="node">Underlying asset</div>
+  </div>
+  <table>
+    <thead><tr><th class="rowlab">Institutional standard</th><th>Aravest approach</th></tr></thead>
+    <tbody>
+      <tr><td class="rowlab">Ring-fenced Asset Holding Structure</td><td>Assets, liabilities and obligations are generally contained within the relevant fund, investment vehicle and asset-level entities.</td></tr>
+      <tr><td class="rowlab">Responsible &amp; Risk-adjusted Capital Structure</td><td>Level of leverage, liquidity, maturity, refinancing, covenant resilience and relevant downside scenarios should be established in accordance with the specific transaction’s risk profile, and addressed through underwriting and ongoing management.</td></tr>
+      <tr><td class="rowlab">Clearly Defined Investor Exposure</td><td>Investors’ exposure is generally limited to committed capital and customary obligations under the applicable fund documents.</td></tr>
+      <tr><td class="rowlab">Institutional Governance Structure / Rights</td><td>Each structure should provide appropriate decision rights, reserved matters, conflicts management, reporting, valuation and oversight.</td></tr>
+      <tr><td class="rowlab">Non-recourse or Limited-recourse Financing</td><td>Financing should generally have recourse only to the relevant borrower, secured assets and expressly agreed transaction-level credit support.</td></tr>
+      <tr><td class="rowlab">No Manager or Shareholder Recourse</td><td>The role of Aravest as manager, or SMFL as shareholder, does not by itself create recourse to either party.</td></tr>
+    </tbody>
+  </table>
+  <div class="three"><div>Committed capital is exposed to investment performance</div><div>Wider fund and asset liabilities are ring-fenced</div><div>Manager or shareholder recourse is not automatic</div></div>
+  <div class="exception"><strong>Exceptions must be explicit and separately approved.</strong>
+    Any guarantee, keepwell, completion support, cost-overrun undertaking, indemnity or other manager- or shareholder-level obligation must be specifically identified, assessed, quantified and expressly approved through the applicable governance process.</div>
+</section>
+
+<!-- CLOSING -->
+<section class="section" id="focus" style="border-top:0">
+  <div class="closing">
+    <h2>Management’s continuing focus</h2>
+    <ol>
+      <li>Build proof through disciplined execution.</li>
+      <li>Establish a credible and repeatable post-SMFL track record through warehousing.</li>
+      <li>Use that track record to attract third-party capital and create new products.</li>
+      <li>Develop Aravest into a sustainable institutional investment-management platform.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer"><div class="shell">
+  <strong>Aravest Pte Ltd</strong> · 23 Church Street #09-05, Capital Square, Singapore 049481<br/>
+  Private &amp; Confidential. Board / Management paper — “Aravest’s Next Phase”. May 2024.
+</div></footer>
+
+</body>
+</html>
